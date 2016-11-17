@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * Implements hook_libraries_info().
+ */
+function hy_cookie_consent_libraries_info() {
+  $libraries = array();
+  $libraries['cookieconsent'] = array(
+    'name' => 'Cookie Consent',
+    'vendor url' => 'https://cookieconsent.insites.com',
+    'download url' => 'https://github.com/insites/cookieconsent',
+    'download file url' => 'https://github.com/insites/cookieconsent/archive/master.zip',
+    // This version callback can be replaced on next libraries release, see more
+    // from https://www.drupal.org/node/2699799
+    'version callback' => 'hy_cookie_consent_get_package_json_version',
+    'files' => array(
+      'js' => array(
+        'build/cookieconsent.min.js' => array('group' => JS_DEFAULT, 'type' => 'file', 'scope' => 'footer'),
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Gets the version information from a library's package.json file.
+ *
+ * @param $library
+ *   An associative array containing all information about the library.
+ * @param $options
+ *   This callback expects no option.
+ * @return
+ *   A string containing the version of the library.
+ *
+ * @see libraries_get_path()
+ */
+function hy_cookie_consent_get_package_json_version($library, $options) {
+  $file = DRUPAL_ROOT . '/' . $library['library path'] . '/package.json';
+  if (!file_exists($file)) {
+    return;
+  }
+
+  $content = file_get_contents($file);
+  if (!$content) {
+    return;
+  }
+
+  $data = drupal_json_decode($content);
+  if (isset($data['version'])) {
+    return $data['version'];
+  }
+}
+
+/**
+ * Implements hook_page_build(&$page).
+ */
+function hy_cookie_consent_page_build(&$page) {
+  if (user_is_anonymous()) {
+    $path = drupal_get_path('module', 'hy_cookie_consent');
+    $options = array(
+      'domain' => 'helsinki.fi',
+      'message' => t(
+        'We use cookies to ensure you get the best experience on our website.'
+      ),
+      'learnMore' => t('Read more about cookies.'),
+      'dismiss' => t('OK'),
+      'link' => hy_cookie_consent_get_read_more_link(),
+      'theme' => '',
+    );
+
+    drupal_add_js(array('cookieconsent_options' => $options), array('group' => JS_LIBRARY,'type' => 'setting', 'scope' => 'footer'));
+    libraries_load_files('cookieconsent');
+    drupal_add_js($path . '/hy_cookie_consent.js', array('group' => JS_DEFAULT, 'type' => 'file', 'scope' => 'footer'));
+  }
+}
+
+function hy_cookie_consent_get_read_more_link() {
+  global $language;
+  $language_code = $language->language;
+
+  return variable_get("uhc_cookie_consent_learn_more_link_$language_code", 'https://www.helsinki.fi/node/7921');
+}
