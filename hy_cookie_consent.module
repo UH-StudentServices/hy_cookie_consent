@@ -79,5 +79,6 @@ function hy_cookie_consent_get_read_more_link() {
   global $language;
   $language_code = $language->language;
 
-  return variable_get("uhc_cookie_consent_learn_more_link_$language_code", 'https://www.helsinki.fi/node/7921');
+  // @TODO Should we use variable realms? Should we create aliased URLs (yes?)
+  return variable_get("hy_cookie_consent_learn_more_link_$language_code", 'https://www.helsinki.fi/node/7921');
 }

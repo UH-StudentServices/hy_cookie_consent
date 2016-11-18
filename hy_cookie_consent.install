@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+ */
+function hy_cookie_consent_uninstall() {
+  // Remove variables
+  db_query("DELETE FROM {variable} WHERE name LIKE 'hy_cookie_consent_learn_more_link_%'");
+}
