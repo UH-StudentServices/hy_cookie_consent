@@ -70,7 +70,7 @@ function hy_cookie_consent_page_build(&$page) {
     );
 
     drupal_add_js(array('cookieconsent_options' => $options), array('group' => JS_LIBRARY,'type' => 'setting', 'scope' => 'footer'));
-    libraries_load_files('cookieconsent');
+    libraries_load('cookieconsent');
     drupal_add_js($path . '/hy_cookie_consent.js', array('group' => JS_DEFAULT, 'type' => 'file', 'scope' => 'footer'));
   }
 }
