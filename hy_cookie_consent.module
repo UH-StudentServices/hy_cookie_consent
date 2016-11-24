@@ -15,7 +15,7 @@ function hy_cookie_consent_libraries_info() {
     'version callback' => 'hy_cookie_consent_get_package_json_version',
     'files' => array(
       'js' => array(
-        'build/cookieconsent.min.js' => array('group' => JS_DEFAULT, 'type' => 'file', 'scope' => 'footer'),
+        'build/cookieconsent.min.js' => array('group' => JS_DEFAULT, 'type' => 'file', 'scope' => 'footer', 'defer' => TRUE),
       ),
     ),
   );
@@ -69,9 +69,9 @@ function hy_cookie_consent_page_build(&$page) {
       'theme' => '',
     );
 
-    drupal_add_js(array('cookieconsent_options' => $options), array('group' => JS_LIBRARY,'type' => 'setting', 'scope' => 'footer'));
+    drupal_add_js(array('cookieconsent_options' => $options), array('group' => JS_LIBRARY,'type' => 'setting', 'scope' => 'footer', 'defer' => TRUE));
     libraries_load('cookieconsent');
-    drupal_add_js($path . '/hy_cookie_consent.js', array('group' => JS_DEFAULT, 'type' => 'file', 'scope' => 'footer'));
+    drupal_add_js($path . '/hy_cookie_consent.js', array('group' => JS_DEFAULT, 'type' => 'file', 'scope' => 'footer', 'defer' => TRUE));
   }
 }
 
