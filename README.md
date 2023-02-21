@@ -1,3 +1,5 @@
+## Archived 21.2.2023 as deprecated & not being developed
+
 # HY Cookie Consent
 This module aims at making the website compliant with the new EU cookie
 regulation using claimed as "The most popular solution to the EU cookie law".
